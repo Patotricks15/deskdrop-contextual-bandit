@@ -1,0 +1,32 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,hyperref}
+\title{LinUCB and Thompson Sampling for DeskDrop Article Recommendation, Evaluated via Replay and Inverse Propensity Scoring}
+\author{Patrick Gomes de Oliveira}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{abstract}
+We recast CI\&T DeskDrop's logged article engagements as a contextual
+bandit with a dynamically changing candidate arm set, evaluated with a
+synthetic, explicit logging policy so that every round carries a known
+propensity. Two classical linear bandits -- LinUCB~\cite{li2010linucb} and
+linear Thompson Sampling -- share one coefficient vector across every
+candidate article, with context built from a point-in-time user content
+profile interacted multiplicatively with each candidate's TF-IDF vector.
+We report both match-conditional replay evaluation and an unbiased
+inverse-propensity-scored (IPS) off-policy value estimate, and show that a
+naive concatenation of user and item features is insufficient for a linear
+model to learn personalised relevance -- an explicit interaction term is
+required.
+\end{abstract}
+\input{sections/01-introduction}
+\input{sections/02-dataset}
+\input{sections/03-feature-engineering}
+\input{sections/04-methodology}
+\input{sections/05-experiments}
+\input{sections/06-results}
+\input{sections/07-conclusion}
+\bibliographystyle{plain}
+\bibliography{references}
+\end{document}

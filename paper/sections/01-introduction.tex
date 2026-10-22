@@ -1,0 +1,11 @@
+\section{Introduction}
+``crop-contextual-recommender'' studies a bandit with a small, fixed arm
+set and agronomic hard constraints. This project studies the classical
+news-recommendation setting LinUCB was originally introduced for (Li et
+al., 2010): a \emph{dynamic} candidate pool that changes every round, which
+rules out a per-arm posterior and requires a shared linear model scored
+against per-candidate feature vectors instead. We additionally evaluate
+off-policy via inverse propensity scoring, since DeskDrop -- like essentially
+every real engagement log -- records only what a historical system showed
+and whether the user engaged, never a counterfactual over what else could
+have been shown.

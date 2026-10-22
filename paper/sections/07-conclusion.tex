@@ -1,0 +1,14 @@
+\section{Limitations and conclusion}
+The logging policy and its propensities are synthetic: DeskDrop itself
+records no propensity, so IPS here evaluates against an explicit, assumed
+historical policy rather than the true unknown one, and the reported
+effective sample size (Section~4.5) should be read as a diagnostic on
+estimator variance, not a guarantee of correctness against reality. The
+20-term TF-IDF vocabulary is deliberately small; a production system would
+tune it against held-out log-likelihood rather than a fixed size. Posterior
+mean serving (Section on serialization) discards the exploration component
+of both bandits between retraining cycles, which is a standard and explicit
+simplification for a batch-retrained system, not a limitation of the
+underlying algorithms. Overall, both LinUCB and Thompson Sampling
+substantially outperform non-contextual baselines once the context
+correctly encodes a person-article interaction term.

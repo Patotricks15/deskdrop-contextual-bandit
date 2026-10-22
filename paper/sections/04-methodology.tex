@@ -1,0 +1,59 @@
+\section{Methodology}
+
+\subsection{Context construction}
+A naive context of $[\text{profile}_t,\ \text{article}_a]$ concatenated is
+insufficient: a linear score $\theta^\top x$ over concatenated blocks has no
+term that multiplies a profile coordinate by an article coordinate, so it
+cannot represent "this article matches this person's topic interest" --
+only independent, person-blind and article-blind additive effects. The
+context actually used is
+
+\begin{equation}
+  x_{t,a} = \big[\,\text{profile}_t \odot v_a,\ v_a,\ \log(1+\text{pop}_{t,a}),\ 1\,\big],
+  \label{eq:context}
+\end{equation}
+
+where $\odot$ is the elementwise product and $v_a$ is article $a$'s TF-IDF
+vector. The interaction block $\text{profile}_t \odot v_a$ lets a single
+shared linear coefficient per vocabulary term score exactly the weighted
+topical overlap between the person and the candidate.
+
+\subsection{LinUCB (shared parameters)}
+A single ridge-regression posterior $A, b$ is shared across every
+candidate: $A \mathrel{+}= x x^\top$, $b \mathrel{+}= r x$ after each
+observed round, with UCB score $p(x) = x^\top \theta + \alpha\sqrt{x^\top
+A^{-1} x}$, $\theta = A^{-1}b$. This is the disjoint-per-arm LinUCB of
+\texttt{crop-contextual-recommender} collapsed to its shared-feature
+special case, appropriate when arms are not fixed and do not individually
+accumulate enough visits.
+
+\subsection{Linear Thompson Sampling}
+A conjugate Bayesian linear regression posterior~\cite{agrawal2013thompson}
+$\mathcal{N}(\mu, \Sigma)$ over the same shared $\theta$ is updated as
+$\Sigma^{-1} \mathrel{+}= xx^\top/\sigma^2$,
+$\Sigma^{-1}\mu \mathrel{+}= rx/\sigma^2$. At each round a single sample
+$\tilde\theta \sim \mathcal{N}(\mu, \Sigma)$ scores every candidate;
+exploration falls out of posterior sampling rather than an explicit bonus.
+
+\subsection{Synthetic logging policy and propensities}
+DeskDrop logs no counterfactual: only the article actually shown (and
+engaged with) is known. We assume the historical system surfaced articles
+in proportion to their already-observed popularity, so at round $t$ a pool
+of candidates is drawn (the logged article plus popularity-weighted
+distractors) and each pool member's propensity is $\pi(a\mid x_t) =
+\text{softmax}(\log(\text{pop}_{t,a}+\epsilon)/\tau)_a$. The logged
+article's own propensity under this explicit policy is what IPS divides by.
+
+\subsection{IPS off-policy evaluation}
+For a frozen policy $\pi'$, the IPS estimator over held-out rounds is
+
+\begin{equation}
+  \hat V_{\text{IPS}}(\pi') = \frac{1}{N}\sum_{t=1}^{N}
+  \frac{\mathbb{1}[\pi'(x_t) = a_t]\, r_t}{\pi(a_t \mid x_t)},
+  \label{eq:ips}
+\end{equation}
+
+an unbiased estimate of $\pi'$'s expected reward under the logging
+distribution when propensities are correctly specified, using every round
+rather than discarding non-matching ones (replay evaluation~\cite{li2011unbiased}, by contrast,
+estimates a conditional quantity and discards them).

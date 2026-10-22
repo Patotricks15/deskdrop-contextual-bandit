@@ -1,0 +1,7 @@
+\section{Experimental protocol}
+Interaction rounds are sorted by timestamp and cut by quantile into
+training (70\%, replayed online), validation (15\%) and test (15\%). We
+compare LinUCB, linear Thompson Sampling, a popularity-greedy baseline, and
+a context-blind random policy, reporting both match-conditional replay
+evaluation (Section~4.5, discarding non-matching rounds) and the IPS
+estimator (Equation~\ref{eq:ips}, using every round) on the test partition.

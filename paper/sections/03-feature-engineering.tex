@@ -1,0 +1,13 @@
+\section{Feature engineering}
+Features are declared in \texttt{conf/features.yaml}.
+\texttt{article\_tfidf} is a 20-term TF-IDF vector fit on the full article
+catalogue's title and body text -- catalogue-only, so it carries no
+interaction-label signal. \texttt{user\_profile\_running\_mean} is the mean
+content vector of a person's strictly-prior interactions, recomputed fresh
+at every round with a strict ``$<$'' cut-off (point-in-time correct); a
+person's first-ever round, or any round for a never-before-seen person,
+receives the zero vector. \texttt{article\_popularity\_running} is the
+strictly-prior interaction count for the round's own article, log-compressed,
+and doubles as the simulated historical system's preference signal for the
+logging policy (Section~4.3). A registry check asserts the YAML
+specification and the implementation agree in both directions.

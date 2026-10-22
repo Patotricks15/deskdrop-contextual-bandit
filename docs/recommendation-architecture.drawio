@@ -1,0 +1,61 @@
+<mxfile host="Drawpyo" modified="2026-10-22T10:55:07" agent="Python 3.12, Drawpyo 0.23" version="21.6.5" type="device">
+  <diagram name="Recommendation architecture" id="139687287715600">
+    <mxGraphModel dx="2037" dy="830" grid="1" gridSize="10" guides="1" toolTips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="139687287715456" value="Raw interaction log + article catalogue&#xa;person, content, event, time" style="whiteSpace=wrap;rounded=1;fillColor=#F7FAFC;strokeColor=#9AA5B1;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="40" width="280" height="72" as="geometry" />
+</mxCell>
+        <mxCell id="139687287715744" value="TF-IDF content vectors&#xa;fit on catalogue text only" style="whiteSpace=wrap;rounded=1;fillColor=#E6FFFA;strokeColor=#277116;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="158" width="280" height="58" as="geometry" />
+</mxCell>
+        <mxCell id="139687287716320" value="Bandit round builder&#xa;candidate pool + synthetic logging policy" style="whiteSpace=wrap;rounded=1;fillColor=#FFF4E6;strokeColor=#D45B07;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="276" width="280" height="72" as="geometry" />
+</mxCell>
+        <mxCell id="139687287716896" value="Global temporal split&#xa;train = replay stream" style="whiteSpace=wrap;rounded=1;fillColor=#FFF4E6;strokeColor=#D45B07;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="409" width="280" height="58" as="geometry" />
+</mxCell>
+        <mxCell id="139687287717472" value="Point-in-time user profile + popularity&#xa;strict &lt; cutoff per round" style="whiteSpace=wrap;rounded=1;fillColor=#E6FFFA;strokeColor=#277116;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="527" width="280" height="72" as="geometry" />
+</mxCell>
+        <mxCell id="139687279771872" value="LinUCB (UCB) / Thompson Sampling (posterior draw)&#xa;shared linear model, profile x article interaction" style="whiteSpace=wrap;rounded=1;fillColor=#EEF2FF;strokeColor=#4D72F3;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="660" width="280" height="86" as="geometry" />
+</mxCell>
+        <mxCell id="139687279772448" value="Evaluation&#xa;online reward + replay match rate + IPS off-policy value" style="whiteSpace=wrap;rounded=1;fillColor=#FFF5F5;strokeColor=#C53030;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="420" y="793" width="280" height="72" as="geometry" />
+</mxCell>
+        <mxCell id="139687279773024" value="Baselines&#xa;Random · Popularity-greedy" style="whiteSpace=wrap;rounded=1;fillColor=#FFFFFF;strokeColor=#9AA5B1;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="70" y="674" width="260" height="58" as="geometry" />
+</mxCell>
+        <mxCell id="139687279773600" value="Policy serialization&#xa;theta, content vectors, profiles -&gt; JSON" style="whiteSpace=wrap;rounded=1;fillColor=#EEF2FF;strokeColor=#4D72F3;dashed=0;html=1;fontSize=11;fontColor=#232F3E;align=center;verticalAlign=middle;" vertex="1" parent="1">
+  <mxGeometry x="770" y="779" width="260" height="58" as="geometry" />
+</mxCell>
+        <mxCell id="139687279774176" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687287715456" target="139687287715744" value="">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279774704" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687287715744" target="139687287716320" value="article vectors">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279774848" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687287716320" target="139687287716896" value="pool, propensity">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279774992" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687287716896" target="139687287717472" value="train only">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279775136" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687287717472" target="139687279771872" value="context">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279775280" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687279773024" target="139687279771872" value="">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279775424" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687279771872" target="139687279772448" value="chosen position">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+        <mxCell id="139687279775568" style="edgeStyle=orthogonalEdgeStyle;orthogonalLoop=1;rounded=1;jettySize=auto;" edge="1" parent="1" source="139687279771872" target="139687279773600" value="fitted theta">
+  <mxGeometry relative="1" as="geometry" />
+</mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

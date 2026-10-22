@@ -1,0 +1,61 @@
+# Feature specification for deskdrop-contextual-bandit.
+#
+# The registry check in `recommender.features.registry` asserts this file and
+# the implementation agree in BOTH directions: a transform cannot be computed
+# without being declared, and a declaration cannot go unimplemented.
+#
+# Fields
+#   family     text    -> article content (title + body).
+#              context -> per-round, person-specific running statistic.
+#              item    -> per-round, article-specific running statistic.
+#   fit_on     catalogue  -> fitted on the article catalogue only; no
+#                            interaction-label signal.
+#              train_only -> a running, point-in-time statistic: every
+#                            round reads only interactions strictly before
+#                            it, so it is leakage-safe in train, validation,
+#                            and test alike.
+#   rationale  Why the feature exists.
+
+version: 1
+dataset: deskdrop
+
+features:
+  - name: article_tfidf
+    family: text
+    dtype: object
+    transform: article_tfidf
+    fit_on: catalogue
+    fill:
+      unseen_article: "zero_vector"
+    rationale: >
+      A small (20-term) TF-IDF vector over each article's title and body is
+      the bandit's only signal about *what* a candidate article is about.
+      Fitted on the full catalogue text, never on interaction labels, so it
+      cannot leak collaborative signal.
+
+  - name: user_profile_running_mean
+    family: context
+    dtype: object
+    transform: user_profile_running_mean
+    fit_on: train_only
+    fill:
+      cold_user: "zero_vector"
+    rationale: >
+      Mean TF-IDF vector of a person's strictly-prior interactions, recomputed
+      fresh at every round. This is what lets the bandit's shared linear
+      model generalise across people: a person with no prior history (cold
+      start) gets the zero vector and the policy falls back to the
+      population-level popularity/content signal alone.
+
+  - name: article_popularity_running
+    family: item
+    dtype: float64
+    transform: article_popularity_running
+    fit_on: train_only
+    fill:
+      unseen_article: 0.0
+    rationale: >
+      Strictly-prior interaction count for the article actually engaged
+      with in each round, log-compressed. Doubles as the logging policy's
+      preference signal: the simulated historical system is assumed to have
+      shown articles roughly in proportion to how popular they already were.

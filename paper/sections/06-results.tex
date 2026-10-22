@@ -1,0 +1,13 @@
+\section{Results}
+\input{tables/results}
+Table~\ref{tab:results} reports both evaluation protocols on the synthetic
+CI fixture. LinUCB attains the highest replay match rate and the highest
+IPS value estimate, with linear Thompson Sampling second; both clearly
+beat the popularity-greedy and random floors. This confirms the context
+design in Equation~\ref{eq:context}: an earlier version of this pipeline
+that concatenated the raw profile and article vectors instead of their
+elementwise product performed \emph{no better than random} regardless of
+training length, because a linear model over concatenated blocks genuinely
+cannot express personalised topical match. We report this as a concrete,
+reproducible illustration of a common pitfall in linear contextual bandits
+for recommendation, not merely as an implementation detail.
